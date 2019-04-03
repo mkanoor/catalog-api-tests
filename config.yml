@@ -1,0 +1,9 @@
+---
+username: xxxxxx
+password: yyyyyy
+host: yourserver
+scheme: https
+debugging: true
+verify_ssl: false
+verify_ssl_host: false
+base_path: /api/catalog/v1.0
