@@ -25,7 +25,8 @@ CatalogApiClient.configure do |config|
   end
 end
 
-api_instance = CatalogApiClient::AdminsApi.new
+order_item_api = CatalogApiClient::OrderItemApi.new
+api_instance = CatalogApiClient::PortfolioItemApi.new
 portfolio_item_id = "118"
 
 begin
@@ -41,20 +42,19 @@ begin
     end
     hash[name] = default
   end
-  service_params['GITHUB_WEBHOOK_SECRET'] = '787878abc'
-  service_params["GENERIC_WEBHOOK_SECRET"] ="12345678"
   puts service_params
-  new_order = api_instance.create_order
+  order_api = CatalogApiClient::OrderApi.new
+  new_order = order_api.create_order
   oitem = CatalogApiClient::OrderItem.new # OrderItem
   oitem.service_plan_ref = service_plan.id
   oitem.portfolio_item_id = portfolio_item_id
   oitem.count = 1
   oitem.service_parameters = service_params
   oitem.provider_control_parameters = {'namespace' => 'default'}
-  result = api_instance.add_to_order(new_order.id, oitem)
-  result = api_instance.submit_order(new_order.id)
-  order_item_id = api_instance.list_order_items(new_order.id).data[0].id
-  process_messages(api_instance, new_order.id, order_item_id)
+  result = order_api.add_to_order(new_order.id, oitem)
+  result = order_api.submit_order(new_order.id)
+  order_item_id = order_api.list_order_items(new_order.id).data[0].id
+  process_messages(order_item_api, new_order.id, order_item_id)
 rescue CatalogApiClient::ApiError => e
   puts "Exception when calling UsersApi->catalog_items: #{e}"
 end
